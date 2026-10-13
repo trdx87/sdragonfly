@@ -15,7 +15,7 @@ A live view of the Dragonfly dashboard showing real-time speed, battery status, 
 ### 2. Hardware Assembly & Wiring
 The physical setup featuring the Seeed Studio XIAO ESP32-C3 wired to the GPS module and SD card reader.
 
-![Hardware Setup](assets/hardware-wiring.jpg)
+![Hardware Setup](assets/hardware-wiring.jpeg)
 
 ## 🚀 System Architecture
 
