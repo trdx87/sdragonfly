@@ -29,11 +29,9 @@
     @keyframes charging-anim { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
     .battery-text { position: absolute; width: 100%; text-align: center; font-size: 13px; font-weight: 700; color: #ffffff; text-shadow: 0 1px 3px rgba(0,0,0,0.9); left: 0; }
 
-    .badge-high { background-color: #0284c7; color: #ffffff; padding: 6px 18px; border-radius: 20px; font-size: 15px; font-weight: 700; letter-spacing: 0.5px; display: inline-block; margin-top: 4px; }
-    
     .status-ok { color: #22c55e; font-weight: 700; font-size: 13px; margin-bottom: 12px; letter-spacing: 0.3px; line-height: 1.4; }
     .status-err { color: #ef4444; font-weight: 700; font-size: 14px; margin-bottom: 12px; letter-spacing: 0.5px; }
-    
+
     .btn { background-color: #0284c7; color: #ffffff; border: none; padding: 12px 16px; font-size: 14px; font-weight: 600; border-radius: 10px; cursor: pointer; width: 100%; margin-top: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
     .btn-download { background-color: #16a34a; margin-top: 10px; }
     .btn-upload { background-color: #d97706; margin-top: 10px; }
@@ -41,40 +39,21 @@
 
     .file-input { width: 100%; background-color: #0f172a; color: #94a3b8; border: 1px dashed #334155; border-radius: 8px; padding: 8px; font-size: 11px; margin-top: 10px; box-sizing: border-box; }
 
-    #mapCanvas {
+    canvas {
       width: 100%;
       height: 200px;
       border-radius: 12px;
-      margin-top: 10px;
+      margin-top: 6px;
       background-color: #090d16;
-      background-image: linear-gradient(rgba(56, 189, 248, 0.05) 1px, transparent 1px), 
+      background-image: linear-gradient(rgba(56, 189, 248, 0.05) 1px, transparent 1px),
                         linear-gradient(90deg, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
       background-size: 20px 20px;
       border: 1px solid #334155;
+      box-sizing: border-box;
     }
 
-    #elevationCanvas {
-      width: 100%;
+    #elevationCanvas, #speedCanvas {
       height: 90px;
-      border-radius: 8px;
-      background-color: #090d16;
-      background-image: linear-gradient(rgba(56, 189, 248, 0.05) 1px, transparent 1px), 
-                        linear-gradient(90deg, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
-      background-size: 15px 15px;
-      border: 1px solid #334155;
-      margin-top: 6px;
-    }
-
-    #speedCanvas {
-      width: 100%;
-      height: 90px;
-      border-radius: 8px;
-      background-color: #090d16;
-      background-image: linear-gradient(rgba(56, 189, 248, 0.05) 1px, transparent 1px), 
-                        linear-gradient(90deg, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
-      background-size: 15px 15px;
-      border: 1px solid #334155;
-      margin-top: 6px;
     }
 
     .file-box { width: 100%; max-height: 130px; overflow-y: auto; background-color: #0f172a; border: 1px solid #334155; border-radius: 8px; margin-top: 12px; padding: 6px; box-sizing: border-box; text-align: left; }
@@ -93,36 +72,41 @@
 
   <h1>DRAGONFLY DASHBOARD</h1>
 
+
   <div class="grid">
+
+    <!-- Speed Profile -->
     <div class="card full-width">
       <div class="label">Speed</div>
-      <div class="value"><span id="speed">24.9</span><span class="unit">km/h</span></div>
+      <div class="value"><span id="speed">0.0</span><span class="unit">km/h</span></div>
     </div>
 
+    <!-- Battery Profile -->
     <div class="card full-width">
       <div class="label">Battery</div>
       <div id="battery-box" class="battery-icon-container">
-        <div id="battery-fill" class="battery-fill" style="width: 22%;"></div>
-        <div id="battery-text" class="battery-text">22%</div>
+        <div id="battery-fill" class="battery-fill" style="width: 0%;"></div>
+        <div id="battery-text" class="battery-text">0%</div>
       </div>
-      <div id="battery-sub" style="font-size: 10px; color: #94a3b8; margin-top: 4px;">3.70V</div>
+      <div id="battery-sub" style="font-size: 10px; color: #94a3b8; margin-top: 4px;">0.00V</div>
     </div>
 
-    <div class="time-widget full-width" style="font-family: monospace; font-size: 1.5rem; color: #38bdf8; background: #1e293b; padding: 10px 20px; border-radius: 8px; display: inline-block;">
-      <span id="gps-date">2026-10-13</span> <span id="gps-time">00:00:00</span>
+    <!-- Time Profile -->
+    <div class="time-widget full-width" style="font-family: monospace; font-size: 1.3rem; color: #38bdf8; background: #1e293b; padding: 10px 20px; border-radius: 8px; display: inline-block;">
+      <span id="gps-date">2026-10-14</span> <span id="gps-time">00:00:00</span>
     </div>
 
-    <!-- Tactical GPS Radar Card -->
+    <!-- UNC Profile -->
     <div class="card full-width">
-      <div class="label">Tactical GPS Dispersion Radar (GUM $U = 11.5m$)</div>
-      <canvas id="radarCanvas" width="300" height="300" style="margin: 0 auto; display: block;"></canvas>
+      <div class="label" style="margin-bottom: 2px; color: #38bdf8;">Tactical GPS Dispersion Radar (GUM = 11.5 m)</div>
+      <div class="label" id="gps-info" style="font-size: 10px; color: #64748b; margin-bottom: 4px;">Satellites: 0 | Lat: 0.0000, Lng: 0.0000</div>
+      <canvas id="localMapCanvas" width="400" height="200"></canvas>
     </div>
 
-    <!-- GPS Map Card -->
+    <!-- Map Profile -->
     <div class="card full-width">
-      <div class="label">Real-time GPS Data</div>
-      <div id="gps-info" style="font-size: 11px; color: #38bdf8; margin-bottom: 5px;">Satellites: 0 | Fix: No</div>
-      <canvas id="mapCanvas" width="400" height="200"></canvas>
+      <div class="label">Real-time GPS Data Full Trip Track</div>
+      <canvas id="tripMapCanvas" width="400" height="200"></canvas>
     </div>
 
     <!-- Elevation Profile -->
@@ -138,17 +122,18 @@
     <div class="card full-width">
       <div class="label">Speed Profile</div>
       <div id="speed-stats" style="font-size: 12px; font-weight: 600; color: #cbd5e1; margin-bottom: 2px;">
-        <span id="speed_kmh">0</span> km/h 
+        <span id="speed_kmh">0</span> km/h
       </div>
       <canvas id="speedCanvas" width="400" height="90"></canvas>
     </div>
 
+    <!-- SD Card Profile -->
     <div class="card full-width" style="padding: 20px 15px;">
       <div class="label">SD Card</div>
       <div id="sd-status" class="status-err">Checking...</div>
       <button class="btn" onclick="retrySD()">Reconnect SD Card</button>
       <button class="btn btn-download" onclick="downloadCSV()">Download Active CSV Log</button>
-      
+
       <input type="file" id="upload-file" class="file-input">
       <button class="btn btn-upload" onclick="uploadFile()">Upload Selected File</button>
 
@@ -159,7 +144,7 @@
     </div>
   </div>
 
-  <footer>ESP32-C3 Wi-Fi | V2.3 Elevation Edition</footer>
+  <footer>ESP32-C3 Wi-Fi | V2.3 GUM Uncertainty Edition by Dr.GaBeSz82</footer>
 
   <script>
     // Speed Profile Canvas Setup
@@ -178,147 +163,134 @@
     let totalLoss = 0;
     let lastAlt = null;
 
-    const radarCanvas = document.getElementById('radarCanvas');
-    const radarCtx = radarCanvas.getContext('2d');
-    let radarPoints = []; // Deviations from the center point in meters (dx, dy)
+    // Upper map unc
+    const localCanvas = document.getElementById('localMapCanvas');
+    const localCtx = localCanvas.getContext('2d');
+    let localPoints = [];
 
-    function drawRadar(currentLat, currentLng, baseLat, baseLatMean, baseLngMean) {
-      const width = radarCanvas.width;
-      const height = radarCanvas.height;
+    function drawLocalUncertaintyMap(lat, lng) {
+      localCtx.clearRect(0, 0, localCanvas.width, localCanvas.height);
+
+      const width = localCanvas.width;
+      const height = localCanvas.height;
       const centerX = width / 2;
       const centerY = height / 2;
 
-      // Remove background
-      radarCtx.clearRect(0, 0, width, height);
+      const radiusMeters = 15.0;
+      const radiusPixels = Math.min(centerX, centerY) - 25;
 
-      // Background grid and crosshair
-      radarCtx.strokeStyle = 'rgba(56, 189, 248, 0.2)';
-      radarCtx.lineWidth = 1;
+      localCtx.strokeStyle = 'rgba(56, 189, 248, 0.08)';
+      localCtx.lineWidth = 1;
+      localCtx.beginPath();
+      localCtx.moveTo(0, centerY); localCtx.lineTo(width, centerY);
+      localCtx.moveTo(centerX, 0); localCtx.lineTo(centerX, height);
+      localCtx.stroke();
 
-      // Cross lines
-      radarCtx.beginPath();
-      radarCtx.moveTo(0, centerY); radarCtx.lineTo(width, centerY);
-      radarCtx.moveTo(centerX, 0); radarCtx.lineTo(centerX, height);
-      radarCtx.stroke();
+      const metersToPx = (m) => (m / radiusMeters) * radiusPixels;
 
-      // Concentric circles (Scale: 1 pixel ~ 0.5 meters, so the 11.5m error corresponds to a circle with a radius of approx. 23 pixels)
-      // Or dynamic scaling: the outer circle should represent the 11.5m expanded uncertainty
-      const maxRadiusMeters = 15.0; // The edge of the radar shows 15 meters.
-      const maxRadiusPixels = width * 0.4;
+      // GUM extended unc circle (U = 11.53m) - Red
+      localCtx.strokeStyle = 'rgba(239, 68, 68, 0.5)';
+      localCtx.lineWidth = 1.5;
+      localCtx.beginPath();
+      localCtx.arc(centerX, centerY, metersToPx(11.53), 0, Math.PI * 2);
+      localCtx.stroke();
 
-      function metersToPixels(meters) {
-        return (meters / maxRadiusMeters) * maxRadiusPixels;
-      }
+      // Std unc circle (u_c = 5.77m) - Blue
+      localCtx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+      localCtx.beginPath();
+      localCtx.arc(centerX, centerY, metersToPx(5.77), 0, Math.PI * 2);
+      localCtx.stroke();
 
-      // 1. Outer circle: Extended uncertainty (U = 11.53 m) – Reddish/Orange warning zone
-      radarCtx.strokeStyle = 'rgba(239, 68, 68, 0.6)';
-      radarCtx.lineWidth = 1.5;
-      radarCtx.beginPath();
-      radarCtx.arc(centerX, centerY, metersToPixels(11.53), 0, Math.PI * 2);
-      radarCtx.stroke();
+      localPoints.push({lat: lat, lng: lng});
+      if (localPoints.length > 120) localPoints.shift();
 
-      // 2. Inner circle: Standard uncertainty (u_c = 5.77 m) – Blue zone
-      radarCtx.strokeStyle = 'rgba(56, 189, 248, 0.5)';
-      radarCtx.beginPath();
-      radarCtx.arc(centerX, centerY, metersToPixels(5.77), 0, Math.PI * 2);
-      radarCtx.stroke();
+      localCtx.strokeStyle = '#38bdf8';
+      localCtx.lineWidth = 2;
+      localCtx.beginPath();
+      localPoints.forEach((p, index) => {
+        let dLatM = (p.lat - lat) * 111320;
+        let dLngM = (p.lng - lng) * 111320 * Math.cos(lat * Math.PI / 180);
 
-      // 3. Extra circle (5 meters)
-      radarCtx.strokeStyle = 'rgba(56, 189, 248, 0.2)';
-      radarCtx.setLineDash([2, 2]);
-      radarCtx.beginPath();
-      radarCtx.arc(centerX, centerY, metersToPixels(5.0), 0, Math.PI * 2);
-      radarCtx.stroke();
-      radarCtx.setLineDash([]); // Vonal visszaállítása
+        let x = centerX + metersToPx(dLngM);
+        let y = centerY - metersToPx(dLatM);
 
-      // Calculate the deviation in meters from the mean (approximate: 1 degree of latitude ~ 111,320 m)
-      // Assume baseLatMean/baseLngMean represents our average stationary position
-      if (!window.radarMeanLat) {
-        window.radarMeanLat = currentLat;
-        window.radarMeanLng = currentLng;
-      }
-
-      let dLatMeters = (currentLat - window.radarMeanLat) * 111320;
-      // The length of a line of longitude depends on the latitude.
-      let dLngMeters = (currentLng - window.radarMeanLng) * 111320 * Math.cos(window.radarMeanLat * Math.PI / 180);
-
-      radarPoints.push({x: dLngMeters, y: -dLatMeters}); // y is inverted due to the canvas coordinates.
-      if (radarPoints.length > 50) radarPoints.shift(); // Retaining the last 50 points
-
-      // Plotting previous drift points (green track)
-      radarPoints.forEach((pt, index) => {
-        let px = centerX + metersToPixels(pt.x);
-        let py = centerY + metersToPixels(pt.y);
-
-        let alpha = index / radarPoints.length;
-        radarCtx.fillStyle = `rgba(34, 197, 94, ${alpha * 0.7})`;
-        radarCtx.beginPath();
-        radarCtx.arc(px, py, 2.5, 0, Math.PI * 2);
-        radarCtx.fill();
+        if (index === 0) localCtx.moveTo(x, y);
+        else localCtx.lineTo(x, y);
       });
+      localCtx.stroke();
 
-      // Current position on the radar (Crosshair / iconic element)
-      let curPx = centerX + metersToPixels(dLngMeters);
-      let curPy = centerY + metersToPixels(dLatMeters);
-
-      radarCtx.strokeStyle = '#22c55e';
-      radarCtx.lineWidth = 2;
-      radarCtx.beginPath();
-      radarCtx.arc(curPx, curPy, 6, 0, Math.PI * 2);
-      radarCtx.stroke();
-
-      // Labels on the radar
-      radarCtx.fillStyle = '#94a3b8';
-      radarCtx.font = '9px monospace';
-      radarCtx.textAlign = 'left';
-      radarCtx.fillText('±5.8m (1σ)', centerX + metersToPixels(5.77) + 3, centerY - 3);
-      radarCtx.fillText('±11.5m (U)', centerX + metersToPixels(11.53) + 3, centerY - 3);
+      localCtx.fillStyle = '#22c55e';
+      localCtx.beginPath();
+      localCtx.arc(centerX, centerY, 6, 0, Math.PI * 2);
+      localCtx.fill();
+      localCtx.strokeStyle = '#ffffff';
+      localCtx.lineWidth = 2;
+      localCtx.stroke();
     }
 
-    // GPS Map Canvas Setup
-    const mapCanvas = document.getElementById('mapCanvas');
-    const mapCtx = mapCanvas.getContext('2d');
-    let pathPoints = [];
+    // Down map, full trip view
+    const tripCanvas = document.getElementById('tripMapCanvas');
+    const tripCtx = tripCanvas.getContext('2d');
+    let tripPathPoints = [];
 
-    function drawMap(lat, lng) {
-      mapCtx.clearRect(0, 0, mapCanvas.width, mapCanvas.height);
-      pathPoints.push({lat: lat, lng: lng});
-      if (pathPoints.length > 120) pathPoints.shift();
+    function drawFullTripMap(lat, lng) {
+      tripPathPoints.push({lat: lat, lng: lng});
 
-      if (pathPoints.length < 2) return;
+      tripCtx.clearRect(0, 0, tripCanvas.width, tripCanvas.height);
+      if (tripPathPoints.length < 2) return;
 
-      let minLat = Math.min(...pathPoints.map(p => p.lat));
-      let maxLat = Math.max(...pathPoints.map(p => p.lat));
-      let minLng = Math.min(...pathPoints.map(p => p.lng));
-      let maxLng = Math.max(...pathPoints.map(p => p.lng));
+      let minLat = Math.min(...tripPathPoints.map(p => p.lat));
+      let maxLat = Math.max(...tripPathPoints.map(p => p.lat));
+      let minLng = Math.min(...tripPathPoints.map(p => p.lng));
+      let maxLng = Math.max(...tripPathPoints.map(p => p.lng));
 
-      let latRange = (maxLat - minLat) || 0.0001;
-      let lngRange = (maxLng - minLng) || 0.0001;
+      let latRange = Math.max(maxLat - minLat, 0.00005);
+      let lngRange = Math.max(maxLng - minLng, 0.00005);
 
-      mapCtx.strokeStyle = '#38bdf8';
-      mapCtx.lineWidth = 3;
-      mapCtx.beginPath();
-      pathPoints.forEach((p, index) => {
-        let x = ((p.lng - minLng) / lngRange) * (mapCanvas.width - 60) + 30;
-        let y = mapCanvas.height - (((p.lat - minLat) / latRange) * (mapCanvas.height - 60) + 30);
-        if (index === 0) mapCtx.moveTo(x, y);
-        else mapCtx.lineTo(x, y);
+      const padding = 35;
+      const w = tripCanvas.width;
+      const h = tripCanvas.height;
+
+      let scaleX = (w - 2 * padding) / lngRange;
+      let scaleY = (h - 2 * padding) / latRange;
+      let scale = Math.min(scaleX, scaleY);
+
+      let centerLat = (minLat + maxLat) / 2;
+      let centerLng = (minLng + maxLng) / 2;
+
+      function project(pLat, pLng) {
+        let x = w / 2 + (pLng - centerLng) * scale * Math.cos(centerLat * Math.PI / 180);
+        let y = h / 2 - (pLat - centerLat) * scale;
+        return {x, y};
+      }
+
+      tripCtx.strokeStyle = '#38bdf8';
+      tripCtx.lineWidth = 3;
+      tripCtx.beginPath();
+      tripPathPoints.forEach((p, index) => {
+        let pt = project(p.lat, p.lng);
+        if (index === 0) tripCtx.moveTo(pt.x, pt.y);
+        else tripCtx.lineTo(pt.x, pt.y);
       });
-      mapCtx.stroke();
+      tripCtx.stroke();
 
-      let last = pathPoints[pathPoints.length - 1];
-      let curX = ((last.lng - minLng) / lngRange) * (mapCanvas.width - 60) + 30;
-      let curY = mapCanvas.height - (((last.lat - minLat) / latRange) * (mapCanvas.height - 60) + 30);
+      let startPt = project(tripPathPoints[0].lat, tripPathPoints[0].lng);
+      tripCtx.fillStyle = '#38bdf8';
+      tripCtx.beginPath();
+      tripCtx.arc(startPt.x, startPt.y, 4, 0, Math.PI * 2);
+      tripCtx.fill();
 
-      mapCtx.fillStyle = '#22c55e';
-      mapCtx.beginPath();
-      mapCtx.arc(curX, curY, 7, 0, Math.PI * 2);
-      mapCtx.fill();
-      mapCtx.strokeStyle = '#ffffff';
-      mapCtx.lineWidth = 2;
-      mapCtx.stroke();
+      let curPt = project(lat, lng);
+      tripCtx.fillStyle = '#22c55e';
+      tripCtx.beginPath();
+      tripCtx.arc(curPt.x, curPt.y, 6, 0, Math.PI * 2);
+      tripCtx.fill();
+      tripCtx.strokeStyle = '#ffffff';
+      tripCtx.lineWidth = 2;
+      tripCtx.stroke();
     }
 
+    // Elevation Profile
     function drawElevation(alt) {
       if (lastAlt !== null) {
         let diff = alt - lastAlt;
@@ -340,7 +312,6 @@
       let maxAlt = Math.max(...elevationPoints);
       let altRange = (maxAlt - minAlt) || 2;
 
-      // Gradient fill under curve
       elevCtx.fillStyle = 'rgba(56, 189, 248, 0.15)';
       elevCtx.beginPath();
       elevCtx.moveTo(15, elevCanvas.height - 10);
@@ -354,7 +325,6 @@
       elevCtx.closePath();
       elevCtx.fill();
 
-      // Elevation line
       elevCtx.strokeStyle = '#38bdf8';
       elevCtx.lineWidth = 2;
       elevCtx.beginPath();
@@ -366,7 +336,6 @@
       });
       elevCtx.stroke();
 
-      // Text labels in top-right corner
       elevCtx.fillStyle = '#94a3b8';
       elevCtx.font = '10px sans-serif';
       elevCtx.textAlign = 'right';
@@ -374,13 +343,12 @@
       elevCtx.fillText(Math.round(minAlt) + ' m', elevCanvas.width - 8, elevCanvas.height - 6);
     }
 
+    // Speed Profile
     function drawSpeed(speed) {
       if (lastSpeed !== null) {
         let diff = speed - lastSpeed;
-        if (diff > 0.2) 
-          totalSpeedGain += diff;
-        else if (diff < -0.2) 
-          totalSpeedLoss += Math.abs(diff);
+        if (diff > 0.2) totalSpeedGain += diff;
+        else if (diff < -0.2) totalSpeedLoss += Math.abs(diff);
       }
       lastSpeed = speed;
 
@@ -396,7 +364,6 @@
       let maxSpeed = Math.max(...speedPoints);
       let speedRange = (maxSpeed - minSpeed) || 2;
 
-      // Gradient fill under speed curve
       speedCtx.fillStyle = 'rgba(56, 189, 248, 0.15)';
       speedCtx.beginPath();
       speedCtx.moveTo(15, speedCanvas.height - 10);
@@ -410,7 +377,6 @@
       speedCtx.closePath();
       speedCtx.fill();
 
-      // Speed line
       speedCtx.strokeStyle = '#38bdf8';
       speedCtx.lineWidth = 2;
       speedCtx.beginPath();
@@ -422,7 +388,6 @@
       });
       speedCtx.stroke();
 
-      // Text labels in top-right corner
       speedCtx.fillStyle = '#94a3b8';
       speedCtx.font = '10px sans-serif';
       speedCtx.textAlign = 'right';
@@ -430,6 +395,9 @@
       speedCtx.fillText(Math.round(minSpeed) + ' km/h', speedCanvas.width - 8, speedCanvas.height - 6);
     }
 
+    //
+    // UPDATE DATA
+    //
     function updateData() {
       fetch('/api/data')
         .then(response => {
@@ -438,14 +406,13 @@
         })
         .then(data => {
           document.getElementById('speed').innerText = data.speed.toFixed(1);
-          
+
           document.getElementById('battery-fill').style.width = data.battery_pct + '%';
           document.getElementById('battery-text').innerText = data.battery_pct + '%';
-          
+
           const batBox = document.getElementById('battery-box');
           const batSub = document.getElementById('battery-sub');
-          
-          // Update Date and Time elements
+
           if (data.time) {
             document.getElementById('gps-time').innerText = data.time;
           }
@@ -464,12 +431,13 @@
           }
 
           document.getElementById('gps-info').innerText = `Satellites: ${data.gps_sats} | Lat: ${data.lat.toFixed(4)}, Lng: ${data.lng.toFixed(4)}`;
-
-          // Update canvas visualizations
-          drawMap(data.lat, data.lng);
+          //
+          // Update Functions
+          //
+          drawLocalUncertaintyMap(data.lat, data.lng);
+          drawFullTripMap(data.lat, data.lng);
           drawElevation(data.alt);
           drawSpeed(data.speed);
-          drawRadar(data.lat, data.lng);
 
           const sdElem = document.getElementById('sd-status');
           if (data.sd_ok) {
